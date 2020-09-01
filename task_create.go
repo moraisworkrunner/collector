@@ -10,7 +10,7 @@ import (
 )
 
 // createTask creates a new task in your App Engine queue.
-func createTask(projectID, locationID, queueID, taskURI, message string) (*taskspb.Task, error) {
+func createTask(projectID, locationID, queueID, service, message string) (*taskspb.Task, error) {
 	// Create a new Cloud Tasks client instance.
 	// See https://godoc.org/cloud.google.com/go/cloudtasks/apiv2
 	ctx := context.Background()
@@ -31,8 +31,10 @@ func createTask(projectID, locationID, queueID, taskURI, message string) (*tasks
 			// https://godoc.org/google.golang.org/genproto/googleapis/cloud/tasks/v2#AppEngineHttpRequest
 			MessageType: &taskspb.Task_AppEngineHttpRequest{
 				AppEngineHttpRequest: &taskspb.AppEngineHttpRequest{
-					HttpMethod:  taskspb.HttpMethod_POST,
-					RelativeUri: taskURI,
+					AppEngineRouting: &taskspb.AppEngineRouting{
+						Service: service,
+					},
+					HttpMethod: taskspb.HttpMethod_POST,
 				},
 			},
 		},
