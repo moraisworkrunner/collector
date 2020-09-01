@@ -34,7 +34,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Do not retry
 		return
 	}
-	if _, err := createTask("moraisworkrunner", location, target, string(body), serviceURL); err != nil {
+	if _, err := createTask("moraisworkrunner", location, target, serviceURL, string(body)); err != nil {
 		fmt.Printf("Failed to create task: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
