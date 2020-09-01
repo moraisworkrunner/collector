@@ -19,9 +19,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if location == "" {
 		location = "nowhere"
 	}
-	serviceName := os.Getenv("SERVICE_NAME")
-	if serviceName == "" {
-		serviceName = "http://:8080"
+	serviceURL := os.Getenv("SERVICE_URL")
+	if serviceURL == "" {
+		serviceURL = "http://:8080"
 	}
 	// Parse the body to send to the queue
 	body, err := ioutil.ReadAll(r.Body)
@@ -34,7 +34,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Do not retry
 		return
 	}
-	if _, err := createTask("moraisworkrunner", location, target, string(body), serviceName); err != nil {
+	if _, err := createTask("moraisworkrunner", location, target, string(body), serviceURL); err != nil {
 		fmt.Printf("Failed to create task: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
